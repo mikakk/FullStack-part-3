@@ -71,6 +71,10 @@ app.post("/api/persons", (req, res) => {
     if (body.phone === undefined) {
         return res.status(400).json({ error: "phone missing" });
     }
+    const contains = persons.filter(person => person.name === body.name);
+    if (contains.length) {
+        return res.status(400).json({ error: "name must be unique" });
+    }
     const person = {
         name: body.name,
         phone: body.phone,
