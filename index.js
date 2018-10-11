@@ -27,10 +27,6 @@ let persons = [
     }
 ];
 
-app.get("/api/persons", (req, res) => {
-    res.json(persons);
-});
-
 app.get("/info", (req, res) => {
     res.send(
         "<p>puhelinluettelossa " +
@@ -40,6 +36,21 @@ app.get("/info", (req, res) => {
             new Date().toString() +
             "</p>"
     );
+});
+
+app.get("/api/persons", (req, res) => {
+    res.json(persons);
+});
+
+app.get("/api/persons/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const person = persons.find(person => person.id === id);
+
+    if (person) {
+        res.json(person);
+    } else {
+        res.status(404).end();
+    }
 });
 
 const PORT = 3001;
