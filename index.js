@@ -1,10 +1,24 @@
 const express = require("express");
 const morgan = require("morgan");
+
+morgan.token("type", function(req, res) {
+    return req.headers["content-type"];
+});
+
+morgan.token("data", function(req, res) {
+    return JSON.stringify(req.body);
+});
+
 const app = express();
 const bodyParser = require("body-parser");
-
-app.use(morgan("tiny"));
 app.use(bodyParser.json());
+
+//app.use(morgan("tiny")); // GET /api/persons 200 179 - 3.632 ms
+app.use(
+    morgan(
+        ":method :type :url :data :status :res[content-length] - :response-time ms"
+    )
+);
 
 let persons = [
     {
