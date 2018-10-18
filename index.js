@@ -1,5 +1,11 @@
 const express = require("express");
+const app = express();
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+app.use(cors());
+app.use(bodyParser.json());
 
 morgan.token("type", function(req, res) {
     return req.headers["content-type"];
@@ -8,10 +14,6 @@ morgan.token("type", function(req, res) {
 morgan.token("data", function(req, res) {
     return JSON.stringify(req.body);
 });
-
-const app = express();
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());
 
 //app.use(morgan("tiny")); // GET /api/persons 200 179 - 3.632 ms
 app.use(
@@ -97,7 +99,8 @@ app.post("/api/persons", (req, res) => {
         id: generateId()
     };
     persons = persons.concat(person);
-    res.json(persons);
+    //res.json(persons);
+    res.json(person);
 });
 
 const PORT = 3001;
