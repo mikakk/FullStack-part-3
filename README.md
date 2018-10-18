@@ -11,6 +11,7 @@ Start:\
 
 ## Zeit.co now
 
+-   https://fullstack-part-3.now.sh/
 -   https://fullstack-part-3.now.sh/info
 -   https://fullstack-part-3.now.sh/api/persons
 -   https://fullstack-part-3.now.sh/api/person/1
