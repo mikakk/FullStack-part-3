@@ -1,0 +1,7 @@
+POST https://part-3-isbfoagxib.now.sh/api/persons
+content-type: application/json
+
+{
+"name": "Etu Suku",
+"phone": "1234567"
+}
