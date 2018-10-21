@@ -48,7 +48,7 @@ let persons = [
 
 const formatPerson = person => {
     return {
-        name: person.content,
+        name: person.name,
         phone: person.phone,
         id: person.id
     };
@@ -66,9 +66,13 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-    Person.find({}).then(persons => {
-        res.json(persons.map(formatPerson));
-    });
+    Person.find({})
+        .then(persons => {
+            res.json(persons.map(formatPerson));
+        })
+        .catch(error => {
+            console.log(error);
+        });
 });
 
 app.get("/api/persons/:id", (req, res) => {
@@ -100,7 +104,22 @@ app.post("/api/persons", (req, res) => {
     if (body.phone === undefined) {
         return res.status(400).json({ error: "phone missing" });
     }
-    const contains = persons.filter(person => person.name === body.name);
+
+    const person = new Person({
+        name: body.name,
+        phone: body.phone,
+        id: generateId()
+    });
+    person
+        .save()
+        .then(savedPerson => {
+            res.json(formatPerson(savedPerson));
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    /*const contains = persons.filter(person => person.name === body.name);
     if (contains.length) {
         return res.status(400).json({ error: "name must be unique" });
     }
@@ -110,8 +129,7 @@ app.post("/api/persons", (req, res) => {
         id: generateId()
     };
     persons = persons.concat(person);
-    //res.json(persons);
-    res.json(person);
+    res.json(person);*/
 });
 
 const PORT = 3001;
