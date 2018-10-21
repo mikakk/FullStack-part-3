@@ -71,8 +71,11 @@ function getPersonModel() {
 }
 
 function readCredentials() {
-    var fs = require("fs");
-    return fs.readFileSync(__dirname + "\\mongo_credentials.txt");
+    console.log("readCredentials()");
+    const fs = require("fs");
+    const path = __dirname + "..\\mongo_credentials.txt";
+    console.log(path);
+    return fs.readFileSync(path);
 }
 
 function generateId() {

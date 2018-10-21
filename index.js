@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+const Person = require("./models/person");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("build"));
@@ -16,7 +17,6 @@ morgan.token("data", function(req, res) {
     return JSON.stringify(req.body);
 });
 
-//app.use(morgan("tiny")); // GET /api/persons 200 179 - 3.632 ms
 app.use(
     morgan(
         ":method :type :url :data :status :res[content-length] - :response-time ms"
@@ -46,6 +46,14 @@ let persons = [
     }
 ];
 
+const formatPerson = person => {
+    return {
+        name: person.content,
+        phone: person.phone,
+        id: person.id
+    };
+};
+
 app.get("/info", (req, res) => {
     res.send(
         "<p>puhelinluettelossa " +
@@ -58,7 +66,9 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-    res.json(persons);
+    Person.find({}).then(persons => {
+        res.json(persons.map(formatPerson));
+    });
 });
 
 app.get("/api/persons/:id", (req, res) => {
