@@ -110,10 +110,22 @@ app.post("/api/persons", (req, res) => {
         return res.status(400).json({ error: "phone missing" });
     }
 
+    /* update */
+    /*Person.find({ name: body.named })
+        .then(result => {
+            console.log(result);
+            res.status(200).end();
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(400).send({ error: "malformatted id" });
+        });*/
+
+    /* add new */
+
     const person = new Person({
         name: body.name,
-        phone: body.phone,
-        id: generateId()
+        phone: body.phone
     });
     person
         .save()
@@ -130,11 +142,39 @@ app.post("/api/persons", (req, res) => {
     }
     const person = {
         name: body.name,
-        phone: body.phone,
-        id: generateId()
+        phone: body.phone
     };
     persons = persons.concat(person);
     res.json(person);*/
+});
+
+app.put("/api/persons/:id", (req, res) => {
+    const body = req.body;
+    console.log("id:", req.params.id);
+
+    /*Person.findById(req.params.id)
+        .then(result => {
+            console.log(result);
+            res.status(200).end();
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(400).send({ error: "malformatted id" });
+        });*/
+
+    const person = {
+        name: body.name,
+        phone: body.phone
+    };
+
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+        .then(updatedPerson => {
+            res.json(formatPerson(updatedPerson));
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(400).send({ error: "malformatted id" });
+        });
 });
 
 const PORT = 3001;
