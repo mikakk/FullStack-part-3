@@ -23,29 +23,6 @@ app.use(
     )
 );
 
-let persons = [
-    {
-        name: "First Last",
-        phone: "5 55555",
-        id: 1
-    },
-    {
-        name: "User User",
-        phone: "050-12345",
-        id: 2
-    },
-    {
-        name: "werwer",
-        phone: "323",
-        id: 4
-    },
-    {
-        name: "sddss",
-        phone: "123",
-        id: "sddss"
-    }
-];
-
 const formatPerson = person => {
     return {
         name: person.name,
@@ -120,57 +97,38 @@ app.post("/api/persons", (req, res) => {
         return res.status(400).json({ error: "phone missing" });
     }
 
-    /* update */
-    /*Person.find({ name: body.named })
+    Person.find({ name: body.name })
         .then(result => {
-            console.log(result);
-            res.status(200).end();
+            if (result.length > 0) {
+                return Promise.reject("duplicate");
+            }
+        })
+        .then(() => {
+            const person = new Person({
+                name: body.name,
+                phone: body.phone
+            });
+            person
+                .save()
+                .then(savedPerson => {
+                    res.json(formatPerson(savedPerson));
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         })
         .catch(error => {
             console.log(error);
-            res.status(400).send({ error: "malformatted id" });
-        });*/
-
-    /* add new */
-
-    const person = new Person({
-        name: body.name,
-        phone: body.phone
-    });
-    person
-        .save()
-        .then(savedPerson => {
-            res.json(formatPerson(savedPerson));
-        })
-        .catch(error => {
-            console.log(error);
+            if (error == "duplicate") {
+                res.status(400).send({ error: "name must be unique" });
+            } else {
+                res.status(400).send({ error: "malformatted id" });
+            }
         });
-
-    /*const contains = persons.filter(person => person.name === body.name);
-    if (contains.length) {
-        return res.status(400).json({ error: "name must be unique" });
-    }
-    const person = {
-        name: body.name,
-        phone: body.phone
-    };
-    persons = persons.concat(person);
-    res.json(person);*/
 });
 
 app.put("/api/persons/:id", (req, res) => {
     const body = req.body;
-    console.log("id:", req.params.id);
-
-    /*Person.findById(req.params.id)
-        .then(result => {
-            console.log(result);
-            res.status(200).end();
-        })
-        .catch(error => {
-            console.log(error);
-            res.status(400).send({ error: "malformatted id" });
-        });*/
 
     const person = {
         name: body.name,
