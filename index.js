@@ -3,8 +3,8 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
 const Person = require("./models/person");
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("build"));
@@ -83,10 +83,6 @@ app.delete("/api/persons/:id", (req, res) => {
             res.status(400).send({ error: "malformatted id" });
         });
 });
-
-const generateId = () => {
-    return Math.floor(Math.random() * Math.floor(999999999));
-};
 
 app.post("/api/persons", (req, res) => {
     const body = req.body;

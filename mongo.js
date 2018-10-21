@@ -1,14 +1,26 @@
+/* 
+node mongo.js
+node mongo.js name 123
+*/
+
 const mongoose = require("mongoose");
 
 if (process.argv.length != 2 && process.argv.length != 4) {
-    console.log("väärät paremetrit");
+    console.log("väärät parametrit");
     return;
 }
 
-const url =
-    "mongodb://" +
-    readCredentials() +
-    "@ds137643.mlab.com:37643/fullstack-part-3";
+console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+console.log("process.env.MONGODB_URI:", process.env.MONGODB_URI);
+if (process.env.NODE_ENV !== "production") {
+    console.log("development");
+    require("dotenv").config();
+} else {
+    console.log("production");
+}
+
+const url = process.env.MONGODB_URI;
+console.log("url:", url);
 
 mongoose.connect(
     url,
@@ -66,14 +78,4 @@ function getPersonModel() {
         name: String,
         phone: String
     });
-}
-
-function readCredentials() {
-    const fs = require("fs");
-    const path = __dirname + "\\mongo_credentials.txt";
-    return fs.readFileSync(path);
-}
-
-function generateId() {
-    return Math.floor(Math.random() * Math.floor(999999999));
 }

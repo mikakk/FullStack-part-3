@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
-const url =
-    "mongodb://" +
-    readCredentials() +
-    "@ds137643.mlab.com:37643/fullstack-part-3";
+console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+if (process.env.NODE_ENV !== "production") {
+    console.log("development");
+    require("dotenv").config();
+} else {
+    console.log("production");
+}
+
+console.log("process.env.MONGODB_URI:", process.env.MONGODB_URI);
+const url = process.env.MONGODB_URI;
 
 mongoose.connect(
     url,
@@ -17,12 +23,6 @@ function getPersonModel() {
         name: String,
         phone: String
     });
-}
-
-function readCredentials() {
-    const fs = require("fs");
-    const path = __dirname + "\\..\\mongo_credentials.txt";
-    return fs.readFileSync(path);
 }
 
 module.exports = Person;
