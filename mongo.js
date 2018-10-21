@@ -47,8 +47,7 @@ function addNewPerson() {
     );
     const person = new Person({
         name: process.argv[2],
-        phone: process.argv[3],
-        id: generateId()
+        phone: process.argv[3]
     });
 
     person
@@ -65,16 +64,13 @@ function addNewPerson() {
 function getPersonModel() {
     return mongoose.model("Person", {
         name: String,
-        phone: String,
-        id: String
+        phone: String
     });
 }
 
 function readCredentials() {
-    console.log("readCredentials()");
     const fs = require("fs");
-    const path = __dirname + "..\\mongo_credentials.txt";
-    console.log(path);
+    const path = __dirname + "\\mongo_credentials.txt";
     return fs.readFileSync(path);
 }
 

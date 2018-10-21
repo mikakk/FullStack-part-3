@@ -50,7 +50,7 @@ const formatPerson = person => {
     return {
         name: person.name,
         phone: person.phone,
-        id: person.id
+        id: person._id
     };
 };
 
@@ -66,7 +66,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-    Person.find({})
+    Person.find({}, { __v: 0 })
         .then(persons => {
             res.json(persons.map(formatPerson));
         })
@@ -87,9 +87,14 @@ app.get("/api/persons/:id", (req, res) => {
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
-    person = persons.filter(person => person.id !== id);
-    res.status(204).end();
+    Person.findByIdAndRemove(req.params.id)
+        .then(result => {
+            res.status(204).end();
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(400).send({ error: "malformatted id" });
+        });
 });
 
 const generateId = () => {

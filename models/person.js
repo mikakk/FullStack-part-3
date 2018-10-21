@@ -15,8 +15,7 @@ const Person = getPersonModel();
 function getPersonModel() {
     return mongoose.model("Person", {
         name: String,
-        phone: String,
-        id: String
+        phone: String
     });
 }
 
