@@ -1,11 +1,11 @@
-/* 
+/*
 node mongo.js
 node mongo.js name 123
 */
 
 const mongoose = require("mongoose");
 
-if (process.argv.length != 2 && process.argv.length != 4) {
+if (process.argv.length !== 2 && process.argv.length !== 4) {
     console.log("väärät parametrit");
     return;
 }
@@ -27,7 +27,7 @@ mongoose.connect(
     { useNewUrlParser: true }
 );
 
-if (process.argv.length == 2) {
+if (process.argv.length === 2) {
     listPersons();
 } else {
     addNewPerson();
@@ -64,7 +64,7 @@ function addNewPerson() {
 
     person
         .save()
-        .then(response => {
+        .then(() => {
             console.log("tallentaminen onnistui");
             mongoose.connection.close();
         })

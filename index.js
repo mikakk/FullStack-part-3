@@ -9,11 +9,11 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("build"));
 
-morgan.token("type", function(req, res) {
+morgan.token("type", function(req) {
     return req.headers["content-type"];
 });
 
-morgan.token("data", function(req, res) {
+morgan.token("data", function(req) {
     return JSON.stringify(req.body);
 });
 
@@ -75,7 +75,7 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.delete("/api/persons/:id", (req, res) => {
     Person.findByIdAndRemove(req.params.id)
-        .then(result => {
+        .then(() => {
             res.status(204).end();
         })
         .catch(error => {
@@ -115,7 +115,7 @@ app.post("/api/persons", (req, res) => {
         })
         .catch(error => {
             console.log(error);
-            if (error == "duplicate") {
+            if (error === "duplicate") {
                 res.status(400).send({ error: "name must be unique" });
             } else {
                 res.status(400).send({ error: "malformatted id" });
